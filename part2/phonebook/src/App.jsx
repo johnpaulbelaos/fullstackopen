@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import phonebookServices from './services/phonebook';
+import Notification from './components/Notification';
 
 const Person = ({ name, number, id, onClick }) => 
   <>{name} {number} <Erase name={name} value={id} onClick={onClick} /><br></br></>;
@@ -46,6 +47,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [notif, setNotif] = useState(null);
 
   useEffect(() => {
     phonebookServices
@@ -68,14 +70,22 @@ const App = () => {
         const changedNumber = { ...existingPerson, number: newNumber };
         phonebookServices
           .update(id, changedNumber)
-          .then(updatedNumber => {setPersons(persons.map(p => p.id === id ? updatedNumber : p))});          
+          .then(updatedNumber => {
+            setPersons(persons.map(p => p.id === id ? updatedNumber : p));
+            setNotif(`${updatedNumber.name} number updated`);
+          })
+          .catch(error => {setNotif(`Information of ${existingPerson.name} already removed from server`);})         
       }
     } else {
       const personObject = {name: newName, number: newNumber};
       phonebookServices
         .create(personObject)
-        .then(returnedPerson => {setPersons(persons.concat(returnedPerson))});
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNotif(`Added ${returnedPerson.name}`);
+        }); 
     }
+    setTimeout(() => {setNotif(null);}, 2000); 
     setNewName('');
     setNewNumber(''); 
   };
@@ -108,6 +118,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      
+      <Notification message={notif} />
       
       <Filter value={filter} onChange={handleFilterChange} />
 
