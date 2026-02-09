@@ -17,7 +17,7 @@ const LanguageList = ({ language }) => {
   );
 };
 
-const Display = ({ countries, onClick }) => {
+const Display = ({ countries, onClick, temp }) => {
   if (countries.length > 10) {
     return (
       <div>
@@ -43,6 +43,13 @@ const Display = ({ countries, onClick }) => {
           {languages.map(language => <LanguageList key={language[0]} language={language[1]} />)}
         </ul>
         <img src={country.flags.png} alt={country.flags.alt} />
+        <h2>
+          Weather in {country.capital[0]}
+        </h2>
+        <p>
+          Temperature {temp}
+        </p>
+
       </div>
     );
   } else {
