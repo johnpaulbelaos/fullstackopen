@@ -1,0 +1,14 @@
+### GET request for /api/blogs
+GET http://localhost:3001/api/blogs
+
+### correct POST request for /api/blogs
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Blog",
+  "author": "McPerson",
+  "url": "blog.com",
+  "likes": 67
+}
+
