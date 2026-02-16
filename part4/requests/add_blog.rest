@@ -1,7 +1,7 @@
 ### GET request for /api/blogs
 GET http://localhost:3001/api/blogs
 
-### correct POST request for /api/blogs
+### correct POST request for /api/blogs, add blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
@@ -12,3 +12,66 @@ Content-Type: application/json
   "likes": 67
 }
 
+### correct POST request for /api/users, create user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "cptamerica",
+  "name": "Steve Rogers",
+  "password": "vibranium"
+}
+
+### correct POST request for /api/users, create user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "ironman",
+  "name": "Tony Stark",
+  "password": "arcreactor"
+}
+
+### correct POST request for /api/login, login to existing account
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "cptamerica",
+  "password": "vibranium"
+}
+
+### correct POST request for /api/login, login to existing account
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "ironman",
+  "password": "arcreactor"
+}
+
+### correct POST request for /api/login, login with wrong password
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "cptamerica",
+  "password": "lol123"
+}
+
+### correct POST request for /api/blogs, add blog with user token
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNwdGFtZXJpY2EiLCJpZCI6IjY5OTE5ZDM3Yzk5Mjc5ODVhMzA5OGM4NyIsImlhdCI6MTc3MTIyNjUyN30.kEQMkwaYLFh07qi1BTwaxYCXEqyR_eVeDyfPGpqv7pc
+
+{
+  "title": "Life",
+  "author": "John Doe",
+  "url": "blog.com",
+  "likes": 420
+}
+
+### correct DELETE request for /api/blogs, delete blog with user token
+DELETE http://localhost:3001/api/blogs/69919e447d2351210e1f8d16
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNwdGFtZXJpY2EiLCJpZCI6IjY5OTE5ZDM3Yzk5Mjc5ODVhMzA5OGM4NyIsImlhdCI6MTc3MTIyNzMxMn0.D2fGU5wkdML5HJaCPuuirxIOsX_meF_9fZGvxjW58m4
+ 
