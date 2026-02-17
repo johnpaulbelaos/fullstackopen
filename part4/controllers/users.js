@@ -10,10 +10,11 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body;
 
+  if (!password) return response.status(400).end();
+  if (password.length < 3) return response.status(400).end();
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
-
-  if (password.length < 3) return response.status(400).end();
 
   const user = new User({
     username,
