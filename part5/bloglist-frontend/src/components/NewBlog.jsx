@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const NewBlog = ({ user, blogs, setBlogs, setNotification }) => {
+const NewBlog = ({ user, createBlog, setNotification }) => {
   const [title, setTitle] = useState('') 
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -11,14 +11,15 @@ const NewBlog = ({ user, blogs, setBlogs, setNotification }) => {
 
     const blogObject = {title: title, author: author, url: url}
     blogService.setToken(user.token)
-    const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
+    
+    createBlog(blogObject)
 
-    setTitle('')
+    const message = `a new blog ${title} by ${author}`
+
+    setTitle('') 
     setAuthor('')
     setUrl('')
 
-    const message = `a new blog ${returnedBlog.title} by ${returnedBlog.author}`
     setNotification({ message, isError: false })
     setTimeout(() => {
       setNotification({ message: null })
