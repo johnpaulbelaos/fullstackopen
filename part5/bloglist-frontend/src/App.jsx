@@ -1,18 +1,24 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+
 import Blog from './components/Blog'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { setNotification } from './reducers/notificationReducer'
+
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({ message: null })
 
   const blogFormRef = useRef()
 
@@ -44,10 +50,7 @@ const App = () => {
       setPassword('')
     } catch {
       const message = 'wrong username or password'
-      setNotification({ message, isError: true })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 5000)
+      dispatch(setNotification({ message, isError: true }, 5000))
     }
   }
 
@@ -75,7 +78,7 @@ const App = () => {
 
   const loginForm = () => (
     <div>
-      <Notification notification={notification} />
+      <Notification />
       <form onSubmit={handleLogin}>
         <div>
           <label>
@@ -109,10 +112,10 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification notification={notification} />
+      <Notification />
       <Login username={user.username} onClick={handleLogout} /> <br />
       <Togglable buttonLabel='create new blog' buttonLabel2='cancel' ref={blogFormRef}>
-        <NewBlog user={user} createBlog={createBlog} setNotification={setNotification} />
+        <NewBlog user={user} createBlog={createBlog} />
       </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />

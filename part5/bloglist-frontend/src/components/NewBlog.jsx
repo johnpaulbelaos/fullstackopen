@@ -1,7 +1,13 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
 import blogService from '../services/blogs'
 
-const NewBlog = ({ user, createBlog, setNotification }) => {
+import { setNotification } from '../reducers/notificationReducer'
+
+const NewBlog = ({ user, createBlog }) => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState('') 
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -20,10 +26,7 @@ const NewBlog = ({ user, createBlog, setNotification }) => {
     setAuthor('')
     setUrl('')
 
-    setNotification({ message, isError: false })
-    setTimeout(() => {
-      setNotification({ message: null })
-    }, 5000)
+    dispatch(setNotification({ message, isError: false }, 5000))
   }
 
   return (
