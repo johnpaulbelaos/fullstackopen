@@ -27,14 +27,15 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
+  const savedBlogPopulated = await savedBlog.populate('user', { username: 1, name: 1 });
 
-  response.status(201).json(savedBlog);
+  response.status(201).json(savedBlogPopulated);
 });
 
 blogsRouter.put('/:id', userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body;
 
-  const blog = await Blog.findById(request.params.id).populate('user', { name: 1 });;
+  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 });
   if (!blog) return response.status(404).end();
 
   blog.title = title;

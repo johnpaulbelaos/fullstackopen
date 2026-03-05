@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
@@ -11,11 +11,12 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { setNotification } from './reducers/notificationReducer'
+import { setBlogs, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
+  const blogs = useSelector(({ blog }) => blog)
 
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
@@ -23,10 +24,8 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( [...blogs].sort((a, b) => b.likes - a.likes) )
-    )  
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -59,21 +58,27 @@ const App = () => {
     setUser(null)
   }
 
+  const loadUser = () => {
+    const user = localStorage.getItem('loggedBlogappUser')
+    return user ? JSON.parse(user) : null
+  }
+
   const createBlog = async blogObject => {
     blogFormRef.current.toggleVisibility()
 
     const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
+    dispatch(setBlogs(blogs.concat(returnedBlog)))
+    setUser(loadUser())
   }
 
   const updateLike = async (id, blogObject) => {
     const likedBlog = await blogService.update(id, blogObject)
-    setBlogs(blogs.map(b => b.id === id ? likedBlog : b).sort((a, b) => b.likes - a.likes))
+    dispatch(setBlogs(blogs.map(b => b.id === id ? likedBlog : b).sort((a, b) => b.likes - a.likes)))
   }
 
   const deleteBlog = async id => {
     await blogService.erase(id)
-    setBlogs(blogs.filter(b => b.id !== id))
+    dispatch(setBlogs(blogs.filter(b => b.id !== id)))
   }
 
   const loginForm = () => (
