@@ -11,7 +11,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { setNotification } from './reducers/notificationReducer'
-import { setBlogs, initializeBlogs } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -58,11 +58,6 @@ const App = () => {
     setUser(null)
   }
 
-  const deleteBlog = async id => {
-    await blogService.erase(id)
-    dispatch(setBlogs(blogs.filter(b => b.id !== id)))
-  }
-
   const loginForm = () => (
     <div>
       <Notification />
@@ -105,7 +100,7 @@ const App = () => {
         <NewBlog user={user} blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} deleteBlog={deleteBlog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
     </div>
   )

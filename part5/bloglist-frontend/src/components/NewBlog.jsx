@@ -21,14 +21,14 @@ const NewBlog = ({ user, blogFormRef }) => {
 
     const message = `a new blog ${title} by ${author}`
 
-    setTitle('') 
-    setAuthor('')
-    setUrl('')
-
     blogFormRef.current.toggleVisibility()
 
     dispatch(appendBlog(blogObject))
     dispatch(setNotification({ message, isError: false }, 5000))
+
+    setTitle('') 
+    setAuthor('')
+    setUrl('')
   }
 
   return (

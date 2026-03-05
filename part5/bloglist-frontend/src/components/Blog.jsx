@@ -2,9 +2,9 @@ import { useState } from "react"
 import { useDispatch } from 'react-redux'
 
 import blogService from '../services/blogs'
-import { likeBlog } from "../reducers/blogReducer"
+import { likeBlog, deleteBlog } from "../reducers/blogReducer"
 
-const Blog = ({ blog, user, deleteBlog }) => {
+const Blog = ({ blog, user }) => {
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
 
@@ -27,7 +27,7 @@ const Blog = ({ blog, user, deleteBlog }) => {
   const handleDeleteBlog = async () => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author} ?`)) {
       blogService.setToken(user.token)
-      deleteBlog(blog.id)
+      dispatch(deleteBlog(blog.id))
     }
   }
 
