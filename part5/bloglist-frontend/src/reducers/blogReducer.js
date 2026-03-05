@@ -25,7 +25,7 @@ const blogSlice = createSlice({
   }
 })
 
-export const { setBlogs, createBlog, like, remove } = blogSlice.actions
+const { setBlogs, createBlog, like, remove } = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {

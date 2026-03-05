@@ -1,32 +1,27 @@
-import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
-import loginService from '../services/login'
-import blogService from '../services/blogs'
 
-import { setNotification } from "../reducers/notificationReducer"
+import { loadUser, loginUser } from "../reducers/userReducer"
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [password, setPassword] = useState('')
+  const user = useSelector(({ user }) => user)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadUser())
+  }, [dispatch])
 
   const handleLogin = async event => {
     event.preventDefault()
     
-    try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUser(user)
+    dispatch(loginUser(username, password))
+    if (user) {
       setUsername('')
       setPassword('')
-    } catch {
-      const message = 'wrong username or password'
-      dispatch(setNotification({ message, isError: true }, 5000))
     }
   }
 

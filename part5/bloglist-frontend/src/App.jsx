@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Blog from './components/Blog'
@@ -13,8 +13,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(({ blog }) => blog)
- 
-  const [user, setUser] = useState(null)
+  const user = useSelector(({ user }) => user)
 
   const blogFormRef = useRef()
 
@@ -22,24 +21,11 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
-
-  const handleLogout = () => {
-    window.localStorage.clear()
-    setUser(null)
-  }
-
   if (user === null) {
     return (
       <div>
         <Notification />
-        <LoginForm setUser={setUser} />
+        <LoginForm />
       </div>
     )
   }
@@ -48,7 +34,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification />
-      <Login username={user.username} onClick={handleLogout} /> <br />
+      <Login /> <br />
       <Togglable buttonLabel='create new blog' buttonLabel2='cancel' ref={blogFormRef}>
         <NewBlog user={user} blogFormRef={blogFormRef} />
       </Togglable>
