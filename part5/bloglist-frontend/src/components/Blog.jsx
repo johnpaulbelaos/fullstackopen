@@ -1,7 +1,11 @@
 import { useState } from "react"
-import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, user, updateLike, deleteBlog }) => {
+import blogService from '../services/blogs'
+import { likeBlog } from "../reducers/blogReducer"
+
+const Blog = ({ blog, user, deleteBlog }) => {
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -17,7 +21,7 @@ const Blog = ({ blog, user, updateLike, deleteBlog }) => {
   const incrementLike = async () => {
     const changedBlog = { ...blog, likes: blog.likes + 1 }
     blogService.setToken(user.token)
-    updateLike(blog.id, changedBlog)
+    dispatch(likeBlog(blog.id, changedBlog))
   }
 
   const handleDeleteBlog = async () => {

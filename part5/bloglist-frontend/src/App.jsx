@@ -58,16 +58,6 @@ const App = () => {
     setUser(null)
   }
 
-  const loadUser = () => {
-    const user = localStorage.getItem('loggedBlogappUser')
-    return user ? JSON.parse(user) : null
-  }
-
-  const updateLike = async (id, blogObject) => {
-    const likedBlog = await blogService.update(id, blogObject)
-    dispatch(setBlogs(blogs.map(b => b.id === id ? likedBlog : b).sort((a, b) => b.likes - a.likes)))
-  }
-
   const deleteBlog = async id => {
     await blogService.erase(id)
     dispatch(setBlogs(blogs.filter(b => b.id !== id)))
@@ -115,7 +105,7 @@ const App = () => {
         <NewBlog user={user} blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />
+        <Blog key={blog.id} blog={blog} user={user} deleteBlog={deleteBlog} />
       )}
     </div>
   )
