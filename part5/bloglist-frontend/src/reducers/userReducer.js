@@ -4,7 +4,6 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 
 import { setNotification } from './notificationReducer'
-import { useDispatch } from 'react-redux'
 
 const userSlice = createSlice({
   name:'user',
