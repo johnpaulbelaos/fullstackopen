@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 
 import blogService from '../services/blogs'
 
 import { setNotification } from '../reducers/notificationReducer'
+import { appendBlog } from '../reducers/blogReducer'
 
-const NewBlog = ({ user, createBlog }) => {
+const NewBlog = ({ user, blogFormRef }) => {
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('') 
@@ -17,8 +18,6 @@ const NewBlog = ({ user, createBlog }) => {
 
     const blogObject = {title: title, author: author, url: url}
     blogService.setToken(user.token)
-    
-    createBlog(blogObject)
 
     const message = `a new blog ${title} by ${author}`
 
@@ -26,6 +25,9 @@ const NewBlog = ({ user, createBlog }) => {
     setAuthor('')
     setUrl('')
 
+    blogFormRef.current.toggleVisibility()
+
+    dispatch(appendBlog(blogObject))
     dispatch(setNotification({ message, isError: false }, 5000))
   }
 

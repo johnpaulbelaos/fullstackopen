@@ -63,14 +63,6 @@ const App = () => {
     return user ? JSON.parse(user) : null
   }
 
-  const createBlog = async blogObject => {
-    blogFormRef.current.toggleVisibility()
-
-    const returnedBlog = await blogService.create(blogObject)
-    dispatch(setBlogs(blogs.concat(returnedBlog)))
-    setUser(loadUser())
-  }
-
   const updateLike = async (id, blogObject) => {
     const likedBlog = await blogService.update(id, blogObject)
     dispatch(setBlogs(blogs.map(b => b.id === id ? likedBlog : b).sort((a, b) => b.likes - a.likes)))
@@ -120,7 +112,7 @@ const App = () => {
       <Notification />
       <Login username={user.username} onClick={handleLogout} /> <br />
       <Togglable buttonLabel='create new blog' buttonLabel2='cancel' ref={blogFormRef}>
-        <NewBlog user={user} createBlog={createBlog} />
+        <NewBlog user={user} blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} updateLike={updateLike} deleteBlog={deleteBlog} />
