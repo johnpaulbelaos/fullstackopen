@@ -26,7 +26,7 @@ const App = () => {
     dispatch(initializeUsers())
   }, [dispatch])
 
-  // users store all existing user and is used in conjuction with individualUser to showw individual user view
+  // users store all existing user and is used in conjuction with individualUser to show individual user view
   const users = useSelector(({ users }) => users)
   const matchUser = useMatch('/users/:id')
   const individualUser = matchUser
