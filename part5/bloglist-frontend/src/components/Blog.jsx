@@ -1,10 +1,12 @@
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import blogService from '../services/blogs'
 import { likeBlog, deleteBlog } from "../reducers/blogReducer"
 
 const Blog = ({ blog, user }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   if (!blog || !user) {
     return null
@@ -22,6 +24,7 @@ const Blog = ({ blog, user }) => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author} ?`)) {
       blogService.setToken(user.token)
       dispatch(deleteBlog(blog.id))
+      navigate('/')
     }
   }
 

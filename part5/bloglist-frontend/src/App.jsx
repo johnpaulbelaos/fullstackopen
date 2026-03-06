@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  Routes, Route, Link, useNavigate, useMatch
+  Routes, Route, useMatch
 } from 'react-router-dom'
 
 import Blogs from './components/Blogs'
@@ -52,9 +52,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <Login />
+      <h2>blog app</h2>
       <Notification />
-      <Login /> <br />
       <Routes>
         <Route path='/users' element={<Users users={users} />} />
         <Route path='/users/:id' element={<User user={individualUser} />} />
