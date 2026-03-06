@@ -1,15 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Routes, Route, Link, useNavigate, useMatch
 } from 'react-router-dom'
 
+import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import LoginForm from './components/LoginForm'
-import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 
@@ -29,16 +28,18 @@ const App = () => {
 
   // users store all existing user and is used in conjuction with individualUser to showw individual user view
   const users = useSelector(({ users }) => users)
-  const match = useMatch('/users/:id')
-  const individualUser = match
-    ? users.find(user => user.id === match.params.id)
+  const matchUser = useMatch('/users/:id')
+  const individualUser = matchUser
+    ? users.find(user => user.id === matchUser.params.id)
     : null
   // user stores data of the current logged user
   const user = useSelector(({ user }) => user)
 
   const blogs = useSelector(({ blog }) => blog)
-
-  const blogFormRef = useRef()
+  const matchBlog = useMatch('/blogs/:id')
+  const blog = matchBlog
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
+    : null
 
   if (user === null) {
     return (
@@ -54,15 +55,11 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <Login /> <br />
-      <Togglable buttonLabel='create new blog' buttonLabel2='cancel' ref={blogFormRef}>
-        <NewBlog user={user} blogFormRef={blogFormRef} />
-      </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
-      )}
       <Routes>
-        <Route path='/users' element={<Users />} />
+        <Route path='/users' element={<Users users={users} />} />
         <Route path='/users/:id' element={<User user={individualUser} />} />
+        <Route path='/blogs/:id' element={<Blog blog={blog} user={user} />} />
+        <Route path='/' element={<Blogs blogs={blogs} user={user} /> } />
       </Routes>
     </div>
   )

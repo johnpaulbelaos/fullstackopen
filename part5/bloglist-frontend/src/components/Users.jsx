@@ -1,8 +1,4 @@
-import { useSelector } from "react-redux"
-
-const Users = () => {
-  const users = useSelector(({ users }) => users)
-
+const Users = ({ users }) => {
   if (!users) {
     return null
   }

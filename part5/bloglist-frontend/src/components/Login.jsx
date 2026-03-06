@@ -7,7 +7,7 @@ const Login = () => {
 
   return (
     <div>
-      {user.username} logged in
+      {user.username} logged in 
       <button type='submit' onClick={ () => dispatch(logoutUser()) }>logout</button>
     </div>
   )

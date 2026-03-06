@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { useDispatch } from 'react-redux'
 
 import blogService from '../services/blogs'
@@ -6,17 +5,12 @@ import { likeBlog, deleteBlog } from "../reducers/blogReducer"
 
 const Blog = ({ blog, user }) => {
   const dispatch = useDispatch()
-  const [visible, setVisible] = useState(false)
 
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  if (!blog || !user) {
+    return null
+  }
 
   const canRemove = blog.user ? blog.user.username === user.username : true
-
-  const buttonLabel = visible ? 'hide' : 'view'
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
 
   const incrementLike = async () => {
     const changedBlog = { ...blog, likes: blog.likes + 1 }
@@ -40,18 +34,16 @@ const Blog = ({ blog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div>
-      {blog.title} {blog.author} <button onClick={toggleVisibility}>{buttonLabel}</button>
-      </div>
-      <div style={showWhenVisible}>
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <p>
         {blog.url} <br />
         {blog.likes} <button onClick={incrementLike}>likes</button><br />
-        {blog.user.name || user.name} <br />
-        {canRemove && <button onClick={handleDeleteBlog}>
-          remove
-        </button>}
-      </div>
+        added by {blog.user.name || user.name} <br />
+        {canRemove && <button onClick={handleDeleteBlog}>remove</button>}
+      </p>
     </div>
   )
 }
