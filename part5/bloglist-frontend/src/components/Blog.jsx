@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import blogService from '../services/blogs'
-import { likeBlog, deleteBlog } from "../reducers/blogReducer"
+import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer"
 
 const Blog = ({ blog, user }) => {
+  const [comment, setComment] = useState('') 
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -28,6 +31,19 @@ const Blog = ({ blog, user }) => {
     }
   }
 
+  const handleComment = async event => {
+    event.preventDefault()
+
+    blogService.setToken(user.token)
+    dispatch(addComment(blog.id, comment))
+
+    setComment('')
+  }
+
+  const generateId = () => {
+    return Math.floor(Math.random() * 1000000)
+  }
+
   return (
     <div>
       <h2>
@@ -39,6 +55,22 @@ const Blog = ({ blog, user }) => {
         added by {blog.user.name || user.name} <br />
         {canRemove && <button onClick={handleDeleteBlog}>remove</button>}
       </p>
+      <h2>
+        comments
+      </h2>
+      <form onSubmit={handleComment}>
+        <label>
+          <input 
+            type='text'
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+        </label>
+        <button type="submit">add comment</button>
+      </form>
+      <ul>
+        {blog.comments.map(comment => <li key={generateId()}>{comment}</li>)}
+      </ul>
     </div>
   )
 }
