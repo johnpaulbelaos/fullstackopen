@@ -1,5 +1,13 @@
 import { Link } from 'react-router-dom'
 
+import styled from 'styled-components'
+
+const StyledLink = styled(Link)`
+  &:visited {
+    color: #393E46;
+  }
+`
+
 const Users = ({ users }) => {
   if (!users) {
     return null
@@ -23,7 +31,7 @@ const Users = ({ users }) => {
           {users.map(user =>
             <tr key={user.id}>
               <td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
+                <StyledLink to={`/users/${user.id}`}>{user.name}</StyledLink>
               </td>
               <td>
                 {user.blogs.length}

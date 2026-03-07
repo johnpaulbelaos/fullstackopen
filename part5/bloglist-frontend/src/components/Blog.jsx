@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer"
 
+import Button from './Button'
+
 const Blog = ({ blog, user }) => {
   const [comment, setComment] = useState('') 
 
@@ -51,9 +53,9 @@ const Blog = ({ blog, user }) => {
       </h2>
       <p>
         {blog.url} <br />
-        {blog.likes} <button onClick={incrementLike}>likes</button><br />
+        {blog.likes} <Button onClick={incrementLike}>likes</Button><br />
         added by {blog.user.name || user.name} <br />
-        {canRemove && <button onClick={handleDeleteBlog}>remove</button>}
+        {canRemove && <Button onClick={handleDeleteBlog}>remove</Button>}
       </p>
       <h2>
         comments
@@ -66,7 +68,7 @@ const Blog = ({ blog, user }) => {
             onChange={({ target }) => setComment(target.value)}
           />
         </label>
-        <button type="submit">add comment</button>
+        <Button type="submit">add comment</Button>
       </form>
       <ul>
         {blog.comments.map(comment => <li key={generateId()}>{comment}</li>)}

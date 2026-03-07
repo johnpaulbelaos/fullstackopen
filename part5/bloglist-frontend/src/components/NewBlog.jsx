@@ -6,6 +6,8 @@ import blogService from '../services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
 import { appendBlog } from '../reducers/blogReducer'
 
+import Button from './Button'
+
 const NewBlog = ({ user, blogFormRef }) => {
   const dispatch = useDispatch()
 
@@ -63,7 +65,7 @@ const NewBlog = ({ user, blogFormRef }) => {
           />
         </label>
       </div>
-      <button type="submit">create</button>
+      <Button type="submit">create</Button>
     </form>
   )
 }

@@ -3,25 +3,33 @@ import { Link } from "react-router-dom"
 
 import { logoutUser } from "../reducers/userReducer"
 
+import styled from "styled-components"
+import Button from './Button'
+
+const Navigation = styled.div`
+  color: #EEEEEE;
+  background: #393E46;
+  padding: 1em;
+`
+
+const StyledLink = styled(Link)`
+  padding-right: 5px;
+  &:visited {
+    color: #EEEEEE;
+  }
+`
+
 const Login = () => {
   const dispatch = useDispatch()
   const user = useSelector(({ user }) => user)
 
-  const padding = {
-    paddingRight: 5,
-  }
-
-  const menuStyle ={
-    backgroundColor: 'gainsboro'
-  }
-
   return (
-    <div style={menuStyle}>
-      <Link style={padding} to="/">blogs</Link>
-      <Link style={padding} to="/users">users</Link>
-      <span style={padding}>{user.name} logged in</span>
-      <button type='submit' onClick={ () => dispatch(logoutUser()) }>logout</button>
-    </div>
+    <Navigation>
+      <StyledLink to="/">blogs</StyledLink>
+      <StyledLink to="/users">users</StyledLink>
+      <span style={{paddingRight: 5}}>{user.name} logged in</span>
+      <Button type='submit' onClick={ () => dispatch(logoutUser()) }>logout</Button>
+    </Navigation>
   )
 }
 

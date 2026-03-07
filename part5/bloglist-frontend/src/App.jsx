@@ -15,6 +15,14 @@ import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
+import styled from 'styled-components'
+
+const Page = styled.div`
+  color: #393E46;
+  padding: 1em;
+  background: #EEEEEE;
+`
+
 const App = () => {
   const dispatch = useDispatch()
 
@@ -43,15 +51,16 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <Page>
         <Notification />
+        <h2>Login</h2>
         <LoginForm />
-      </div>
+      </Page>
     )
   }
 
   return (
-    <div>
+    <Page>
       <Login />
       <h2>blog app</h2>
       <Notification />
@@ -61,7 +70,7 @@ const App = () => {
         <Route path='/blogs/:id' element={<Blog blog={blog} user={user} />} />
         <Route path='/' element={<Blogs blogs={blogs} user={user} /> } />
       </Routes>
-    </div>
+    </Page>
   )
 }
 

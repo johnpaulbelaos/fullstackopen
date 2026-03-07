@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { loadUser, loginUser } from "../reducers/userReducer"
 
+import Button from "./Button"
+
 const LoginForm = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
@@ -47,7 +49,7 @@ const LoginForm = () => {
           />
         </label>
       </div>
-      <button type="submit">login</button>
+      <Button type="submit">login</Button>
     </form>
   )
 }

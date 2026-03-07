@@ -5,38 +5,45 @@ import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 import NewBlog from './NewBlog'
 
+import styled from 'styled-components'
+
+const List = styled.li`
+  background: Gainsboro;
+  marginBottom: 10em;
+  paddingTop: 10em;
+  paddingLeft: 2em;
+  border: 2px solid #222831;
+  border-radius: 3px;
+`
+const UL = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`
+
+const StyledLink = styled(Link)`
+  &:visited {
+    color: #393E46;
+  }
+`
+
 const Blogs = ({ blogs, user }) => {
   const blogFormRef = useRef()
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    borderRadius: 3,
-    marginBottom: 5
-  }
-
-  const listStyle = {
-    listStyleType: 'none',
-    padding: 0,
-    margin: 0
-  }
 
   return (
     <div>
       <Togglable buttonLabel='create new blog' buttonLabel2='cancel' ref={blogFormRef}>
         <NewBlog user={user} blogFormRef={blogFormRef} />
       </Togglable>
-      <ul style={listStyle}>
+      <UL>
         {blogs.map(blog => 
-          <li key={blog.id} style={blogStyle}>
-            <Link to={`/blogs/${blog.id}`}>
+          <List key={blog.id}>
+            <StyledLink to={`/blogs/${blog.id}`}>
               {blog.title}
-            </Link>
-          </li>
+            </StyledLink>
+          </List>
         )}
-      </ul>
+      </UL>
     </div>
   )
 }
