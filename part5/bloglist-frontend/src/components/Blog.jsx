@@ -23,7 +23,7 @@ const Blog = ({ blog, user }) => {
   const handleDeleteBlog = async () => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author} ?`)) {
       blogService.setToken(user.token)
-      dispatch(deleteBlog(blog.id))
+      dispatch(deleteBlog(blog.id, blog.user.id))
       navigate('/')
     }
   }

@@ -32,15 +32,28 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   response.status(201).json(savedBlogPopulated);
 });
 
+blogsRouter.post('/:id/comments', userExtractor, async (request, response) => {
+  const body = request.body;
+  const user = request.user;
+
+  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 });
+
+  blog.comments = blog.comments.concat(body)
+
+  const savedBlog = await blog.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
+  const savedBlogPopulated = await savedBlog.populate('user', { username: 1, name: 1 });
+
+  response.status(201).json(savedBlogPopulated);
+});
+
 blogsRouter.put('/:id', userExtractor, async (request, response) => {
-  const { title, author, url, likes } = request.body;
+  const { likes } = request.body;
 
   const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 });
   if (!blog) return response.status(404).end();
 
-  blog.title = title;
-  blog.author = author;
-  blog.url = url;
   blog.likes = likes;
 
   const updatedBlog = await blog.save();
