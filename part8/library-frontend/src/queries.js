@@ -15,7 +15,11 @@ export const ALL_BOOKS = gql`
     allBooks {
       title
       published
-      author
+      author {
+        name
+        born
+        bookCount
+      }
     }
   }
 `
@@ -30,7 +34,11 @@ export const ADD_BOOK = gql`
     addBook(title: $title, published: $publishedInt, author: $author, genres: $genres) {
       title
       published
-      author
+      author{
+        name
+        born
+        bookCount
+      }
       genres
     }
   }
