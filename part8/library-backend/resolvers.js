@@ -19,7 +19,10 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author })
       return Book.find({ author: author._id, genres: args.genre }).populate('author', { name: 1, born: 1})
     },
-    allAuthors: async () => Author.find({})
+    allAuthors: async () => Author.find({}),
+    me: (root, args, context) => {
+      return context.currentUser
+    }
   },
   Author: {
     bookCount: async (root) => {
