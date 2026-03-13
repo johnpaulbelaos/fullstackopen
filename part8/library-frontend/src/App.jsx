@@ -33,8 +33,9 @@ const App = () => {
   }
 
   const onLogout = () => {
-    setToken(null)
+    setToken(null)  
     setPage('authors')
+    setGenre(null)
     localStorage.clear()
     client.resetStore()
   }
@@ -58,7 +59,7 @@ const App = () => {
 
       <Recommended show={page === 'recommended'} favoriteGenre={genre} />
 
-      <LoginForm show={page === 'login'} setToken={setToken} setPage={setPage} />
+      <LoginForm show={page === 'login'} setToken={setToken} setPage={setPage} meQuery={result} />
     </div>
   )
 }
