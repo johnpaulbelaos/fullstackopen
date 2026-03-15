@@ -16,12 +16,10 @@ const NewBook = (props) => {
           allBooks: allBooks.concat(response.data.addBook)
         }
       })
-      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-        return {
-          allAuthors: allAuthors.concat(response.data.addBook.author)
-        }
-      })
-    }
+    },
+    refetchQueries: [
+      { query: ALL_AUTHORS }
+    ]
   })
 
   if (!props.show) {

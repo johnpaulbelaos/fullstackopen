@@ -26,6 +26,7 @@ const Books = (props) => {
 
   const handleClick = (event) => {
     setGenre(event.target.value)
+    filteredResult.refetch()
   }
 
   return (

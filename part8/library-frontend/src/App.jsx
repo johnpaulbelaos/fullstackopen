@@ -55,7 +55,7 @@ const App = () => {
 
       <Books show={page === 'books'} />
 
-      <NewBook show={page === 'add'} />
+      <NewBook show={page === 'add'} favoriteGenre={genre}/>
 
       <Recommended show={page === 'recommended'} favoriteGenre={genre} />
 
