@@ -3,7 +3,10 @@ const Author = require('./models/author')
 const User = require('./models/user')
 
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('graphql-subscriptions')
 const { GraphQLError } = require('graphql')
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -19,15 +22,11 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author })
       return Book.find({ author: author._id, genres: args.genre }).populate('author', { name: 1, born: 1})
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      return Author.find({}).populate('bookCount')
+    },
     me: (root, args, context) => {
       return context.currentUser
-    }
-  },
-  Author: {
-    bookCount: async (root) => {
-      const booksWritten = await Book.find({ author: root._id })
-      return booksWritten.length
     }
   },
   Mutation: {
@@ -45,8 +44,10 @@ const resolvers = {
       const authorExists = await Author.findOne({ name: args.author })
 
       if (authorExists) {
+        authorExists.bookCount += 1
         const book = new Book({ ...args, author: authorExists._id })
         try {
+          await authorExists.save()
           await book.save()
         } catch (error) {
           throw new GraphQLError(`Saving book failed: ${error.message}`, {
@@ -62,6 +63,7 @@ const resolvers = {
 
       const author = new Author({ name: args.author })
       try {
+        author.bookCount = 1
         await author.save()
       } catch (error) {
         throw new GraphQLError(`Saving book failed: ${error.message}`, {
@@ -72,7 +74,7 @@ const resolvers = {
           }
         })
       }
-
+      
       const book = new Book({ ...args, author: author._id})
       try {
         await book.save()
@@ -86,6 +88,8 @@ const resolvers = {
           }
         })
       }
+
+     pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
       return book.populate('author', { name: 1, born: 1 })
     },
@@ -140,7 +144,12 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     }
-  }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED')
+    },
+  },
 }
 
 module.exports = resolvers

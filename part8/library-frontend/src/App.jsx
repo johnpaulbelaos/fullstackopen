@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client/react'
 
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -7,7 +7,9 @@ import NewBook from './components/NewBook'
 import Recommended from './components/Recommended'
 import LoginForm from './components/LoginForm'
 
-import { FAVORITE_GENRE } from './queries'
+import { FAVORITE_GENRE, BOOK_ADDED } from './queries'
+
+import { addBookToCache } from './utils/apolloCache'
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('library-user-token'))
@@ -15,6 +17,14 @@ const App = () => {
   const [genre, setGenre] = useState(null)
 
   const client = useApolloClient()
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      window.alert(`${addedBook.title} added`)
+      addBookToCache(client.cache, addedBook)
+    },
+  })
 
   const result = useQuery(FAVORITE_GENRE)
   
