@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender} from "./types";
 import { z } from 'zod';
 
 export const NewPatientSchema = z.object({
@@ -10,5 +10,5 @@ export const NewPatientSchema = z.object({
 });
 
 export const toNewPatient = (object: unknown): NewPatient => {
-  return NewPatientSchema.parse(object);
+  return {...NewPatientSchema.parse(object), entries: []};
 };

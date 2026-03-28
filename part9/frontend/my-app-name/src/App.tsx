@@ -53,24 +53,27 @@ const Header = (props: HeaderProps) => {
 
 const Content = (props: ContentProps) => {
   return (
+    <div>
       <p>
-        {props.name} {props.exerciseCount}
+        <strong>{props.name} {props.exerciseCount}</strong><br/>
+        <Part {...props.part} />
       </p>
+    </div>
   );
 };
 
 const Part = (props: CoursePart) => {
   switch (props.kind) {
     case 'basic':
-      return <p>{props.description}</p>
+      return <em>{props.description}</em>
     case 'group':
-      return <p>project exercises {props.groupProjectCount}</p>
+      return <>project exercises {props.groupProjectCount}</>
     case 'background':
       return (
-        <p>
-          {props.description} <br/>
+        <>
+          <em>{props.description}</em> <br/>
           {props.backgroundMaterial}
-        </p>
+        </>
       )
     default:
       return assertNever(props);
